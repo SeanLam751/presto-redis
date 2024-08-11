@@ -1,0 +1,25 @@
+version:
+  java: 11
+  presto: 0.288
+
+host:
+  redis: redis-service.default.svc.cluster.local
+port:
+  redis: 6379
+
+replicas:
+  redis: 2
+  rockylinux: 2
+  ubuntu: 1
+
+presto:
+  mode: cluster
+  coordinator:
+    replicas: 1
+  worker:
+    replicas: 2
+  catalog:
+    redis: |-
+      connector.name=redis
+      redis.table-names=table
+      redis.nodes=redis-service.default.svc.cluster.local:6379

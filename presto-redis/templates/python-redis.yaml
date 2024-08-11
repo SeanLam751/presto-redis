@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: python-job
+  namespace: {{ .Release.Namespace }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: python-job
+    spec:
+      containers:
+      - name: python-redis
+        image: seanlam751/presto-redis-python:latest
+        command:
+          - "python3"
+          - "presto-redis.py"
+        args:
+          - "--host={{.Values.host.redis}}"
+          - "--port={{.Values.port.redis}}"
+      restartPolicy: OnFailure

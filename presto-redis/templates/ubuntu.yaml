@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ubuntu-deployment
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicas.ubuntu }}
+  selector:
+    matchLabels:
+      app: ubuntu-deployment
+  template:
+    metadata:
+      labels:
+        app: ubuntu-deployment
+    spec:
+      containers:
+        - name: ubuntu
+          image: ubuntu:20.04
+          command:
+            - "/bin/bash"
+            - "-c"
+          args:
+            - |
+              apt-get update && \
+              apt-get install -y redis wget openjdk-{{ default 11 .Values.version.java }}-jdk-headless less && \
+              wget -q https://repo1.maven.org/maven2/com/facebook/presto/presto-cli/{{ .Values.version.presto }}/presto-cli-{{ .Values.version.presto }}-executable.jar && \
+              mv presto-cli-{{ .Values.version.presto }}-executable.jar presto && \
+              chmod +x presto && \
+              sleep infinity
+          env:
+            - name: REDIS_HOST
+              value: "redis-service"

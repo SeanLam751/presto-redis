@@ -1,0 +1,10 @@
+apiVersion: v2
+appVersion: 1.16.0
+dependencies:
+- name: presto
+  repository: https://prestodb.github.io/presto-helm-charts
+  version: 0.2.0
+description: A Helm chart for Kubernetes
+name: presto-redis
+type: application
+version: 0.1.0

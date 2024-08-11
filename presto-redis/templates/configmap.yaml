@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap
+  namespace: {{ .Release.Namespace }}
+data:
+  redis-service: redis-service

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rocky-linux-deployment
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicas.rockylinux }}
+  selector:
+    matchLabels:
+      app: rockylinux
+  template:
+    metadata:
+      labels:
+        app: rockylinux
+    spec:
+      containers:
+      - name: rockylinux
+        image: rockylinux:9
+        command:
+          - "/bin/bash"
+          - "-c"
+        args:
+          - sleep infinity
