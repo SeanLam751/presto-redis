@@ -17,6 +17,6 @@ entries:
     - https://github.com/prestodb/presto-helm-charts
     type: application
     urls:
-    - presto-redis/charts/presto-0.3.0.tgz
+    - charts/presto-0.3.0.tgz
     version: 0.3.0
 generated: "2024-08-10T17:19:21.683785433-07:00"
