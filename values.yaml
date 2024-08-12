@@ -1,16 +1,19 @@
 version:
   java: 11
   presto: 0.288
+  mongo: 7.0.12
 
 host:
   redis: redis-service.default.svc.cluster.local
 port:
   redis: 6379
+  mongo: 27017
 
 replicas:
   redis: 2
   rockylinux: 2
   ubuntu: 1
+  mongo: 2
 
 presto:
   mode: cluster
