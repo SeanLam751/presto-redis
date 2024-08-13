@@ -5,3 +5,14 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   redis-service: redis-service
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-configmap
+  namespace: {{ .Release.Namespace }}
+data:
+  mongo.conf: |
+    storage:
+      dbPath: /data
+  

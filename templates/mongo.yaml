@@ -1,27 +1,54 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: mongo-deployment
-  namespace: {{ .Release.Namespace }}
+  name: mongodb-replica
+  namespace: default
 spec:
-  replicas: {{ .Values.replicas.mongo }}
+  serviceName: mongo
+  replicas: 2
   selector:
     matchLabels:
-      app: mongo-deployment
+      app: mongo
   template:
     metadata:
       labels:
-        app: mongo-deployment
+        app: mongo
+        selector: mongo
     spec:
-      initContainers:
-      - name: mongo-init
-        image: mongo:{{ .Values.version.mongo }}
-        command: ['sh', '-c', 'until mongosh --host mongo-service --eval "print(\"waited for connection\")"; do sleep 5; done; mongosh --host mongo-service --eval "db.adminCommand( { shutdown : 1} );rs.initiate()"']
+      terminationGracePeriodSeconds: 30
+      serviceAccount: mongo-account
       containers:
-      - name: mongo
+      - name: mongodb
         image: mongo:{{ .Values.version.mongo }}
+        command: ["/bin/sh"]
+        args: ["-c", "mongod --replSet=rs0 --bind_ip_all"]
+        resources:
+          limits:
+            cpu: 1
+            memory: 1500Mi
+          requests:
+            cpu: 1
+            memory: 1000Mi
         ports:
-            - containerPort: {{ .Values.port.mongo }}
+        - name: mongo-port
+          containerPort: 27017
+        volumeMounts:
+        - name: mongodb-data
+          mountPath: /data
+        - name: mongo-configmap
+          mountPath: /config
+          readOnly: true
+      volumes:
+      - name: mongodb-data
+        persistentVolumeClaim:
+          claimName: mongo-pvc
+      - name: mongo-configmap
+        configMap:
+          name: mongo-configmap
+          items:
+          - key: mongo.conf
+            path: mongo.conf
+
 ---
 apiVersion: v1
 kind: Service
@@ -30,7 +57,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   selector:
-    app: mongo-deployment
+    app: mongo
   ports:
     - protocol: TCP
       port: {{ .Values.port.mongo }}
