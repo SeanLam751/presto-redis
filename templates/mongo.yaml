@@ -13,6 +13,10 @@ spec:
       labels:
         app: mongo-deployment
     spec:
+      initContainers:
+      - name: mongo-init
+        image: mongo:{{ .Values.version.mongo }}
+        command: ['sh', '-c', 'until mongosh --host mongo-service --eval "print(\"waited for connection\")"; do sleep 5; done; mongosh --host mongo-service --eval "db.adminCommand( { shutdown : 1} );rs.initiate()"']
       containers:
       - name: mongo
         image: mongo:{{ .Values.version.mongo }}
