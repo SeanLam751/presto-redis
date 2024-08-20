@@ -1,11 +1,12 @@
-Presto Redis Helm Chart
+Presto Mongo Helm Chart
 ==
 This is a helm chart with the following features
 - Presto with
     - 1 coordinator node
     - 2 worker nodes
-    - A redis connector
+    - A redis and mongo connector
 - 2 Redis nodes
+- 1 Mongo node
 - 2 rocky linux nodes
 - 1 ubuntu node with
     - Presto cli
@@ -13,6 +14,8 @@ This is a helm chart with the following features
 - 1 python job to populate the redis node with data
 ## Usage
 [Helm](https://helm.sh) must be installed to use the charts.
+
+It is recommended to configure more memory for the kubernetes cluster. Presto is relatively memory hungry. This helm chart is confirmed to work with 7gb of memory.
 
 Once helm is installed, add the repo as follows:
 ```console
@@ -25,3 +28,4 @@ Then, you can install the chart with
 ```console
 helm install presto-redis presto-redis/presto-redis
 ```
+To make the mongo database work, 

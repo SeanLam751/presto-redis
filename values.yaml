@@ -13,7 +13,7 @@ replicas:
   redis: 2
   rockylinux: 2
   ubuntu: 1
-  mongo: 2
+  mongo: 1
 
 presto:
   mode: cluster
