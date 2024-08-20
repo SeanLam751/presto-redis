@@ -26,3 +26,7 @@ presto:
       connector.name=redis
       redis.table-names=table
       redis.nodes=redis-service.default.svc.cluster.local:6379
+  livenessProbe:
+    initialDelaySeconds: 90
+  readinessProbe:
+    initialDelaySeconds: 90

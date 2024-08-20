@@ -16,10 +16,10 @@ spec:
     required:
       nodeSelectorTerms:
       - matchExpressions:
-        - key: parent
+        - key: nodeAffinity
           operator: In
           values:
-            - minikube
+            - default
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
