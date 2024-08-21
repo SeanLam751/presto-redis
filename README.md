@@ -28,8 +28,31 @@ Then, you can install the chart with
 ```console
 helm install presto-redis presto-redis/presto-redis
 ```
-To make the mongo database work, the storage needs to be given the label nodeAffinity=default. On minikube, you can grant the label like so:
+To make the mongo database work, the storage needs to be given the label `nodeAffinity=default`. On minikube, you can grant the label like so:
 ```console
 kubectl label nodes minikube nodeAffinity=default
 ```
-In addition, the configma
+In addition, the database does not have a functional automatic script. To add data to the database, use the following commands to `kubectl exec -it pod/mongodb-replica-0 -- /bin/bash`
+```js
+rs.initiate({
+    _id: "rs0",
+    members: [
+        { _id: 0, host: "mongodb-replica-0.mongo-service.default.svc.cluster.local:27017" }
+    ]
+    });
+
+    // Create a collection and insert some documents
+    // do not name the database with any capital letter
+    db.testcollection.insertMany([
+      { name: "Alice", age: 30 },
+      { name: "Bob", age: 25 },
+      { name: "Carol", age: 35 }
+    ]);
+
+    print("Database initialized with test data.");
+```
+
+To connect to presto, first find the name of the ubuntu deployment with `kubectl get pod -l app=ubuntu-deployment`
+Then, connect to ubuntu instance with `kubectl exec -it <ubuntu-name> -- /bin/bash`
+Then search for the cluster ip with `kubectl get svc presto-redis`
+Finally, connect to presto using `./presto --server <cluster-ip>:8080`
