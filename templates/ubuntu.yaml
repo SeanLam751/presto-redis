@@ -21,11 +21,14 @@ spec:
             - "-c"
           args:
             - |
+              echo "nameserver 8.8.8.8" | tee /etc/resolv.conf > /dev/null
               apt-get update && \
-              apt-get install -y redis wget openjdk-{{ default 11 .Values.version.java }}-jdk-headless less && \
+              apt-get install -y redis wget openjdk-{{ .Values.version.java }}-jdk-headless less && \
               wget -q https://repo1.maven.org/maven2/com/facebook/presto/presto-cli/{{ .Values.version.presto }}/presto-cli-{{ .Values.version.presto }}-executable.jar && \
               mv presto-cli-{{ .Values.version.presto }}-executable.jar presto && \
               chmod +x presto && \
+              wget https://downloads.mongodb.com/compass/mongodb-mongosh_{{ .Values.version.mongosh }}_amd64.deb
+              dpkg -i mongodb-mongosh_{{ .Values.version.mongosh }}_amd64.deb
               sleep infinity
           env:
             - name: REDIS_HOST

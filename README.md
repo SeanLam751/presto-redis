@@ -28,4 +28,8 @@ Then, you can install the chart with
 ```console
 helm install presto-redis presto-redis/presto-redis
 ```
-To make the mongo database work, 
+To make the mongo database work, the storage needs to be given the label nodeAffinity=default. On minikube, you can grant the label like so:
+```console
+kubectl label nodes minikube nodeAffinity=default
+```
+In addition, the configma

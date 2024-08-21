@@ -2,6 +2,7 @@ version:
   java: 11
   presto: 0.288
   mongo: 7.0.12
+  mongosh: 2.3.0
 
 host:
   redis: redis-service.default.svc.cluster.local
@@ -26,6 +27,9 @@ presto:
       connector.name=redis
       redis.table-names=table
       redis.nodes=redis-service.default.svc.cluster.local:6379
+    mongo: |-
+      connector.name=mongodb
+      mongodb.seeds=mongo-service.default.svc.cluster.local:27017
   livenessProbe:
     initialDelaySeconds: 90
   readinessProbe:

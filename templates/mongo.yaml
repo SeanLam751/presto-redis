@@ -20,8 +20,9 @@ spec:
         image: mongo:{{ .Values.version.mongo }}
         command:
         - "mongod"
-        - "--config"
-        - "/etc/mongod.conf"
+        - "--bind_ip_all"
+        - "--replSet"
+        - "rs0"
         resources:
           limits:
             cpu: 1
@@ -33,9 +34,6 @@ spec:
         - name: mongo-port
           containerPort: {{ .Values.port.mongo }}
         volumeMounts:
-        - name: mongo-config
-          mountPath: /etc/mongod.conf
-          subPath: mongod.conf
         - name: mongo-init
           mountPath: /docker-entrypoint-initdb.d
         - name: mongodb-data
@@ -47,9 +45,6 @@ spec:
       - name: mongo-init
         configMap:
           name: mongo-init-config
-      - name: mongo-config
-        configMap:
-          name: mongo-config
 ---
 apiVersion: v1
 kind: Service
